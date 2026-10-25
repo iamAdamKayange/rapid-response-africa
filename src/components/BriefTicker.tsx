@@ -1,7 +1,5 @@
-import { tickerItems } from "@/lib/content";
-
-export default function BriefTicker() {
-  const items = [...tickerItems, ...tickerItems];
+export default function BriefTicker({ items: source }: { items: string[] }) {
+  const items = [...source, ...source];
   return (
     <div className="border-b border-stone-200 bg-stone-50">
       <div className="container-x flex h-10 items-center gap-4 overflow-hidden">

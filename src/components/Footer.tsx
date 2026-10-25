@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Logo from "./Logo";
-import { XIcon } from "./Icons";
+import SocialLinks from "./SocialLinks";
 import { sections, site } from "@/lib/content";
 
 export default function Footer() {
@@ -10,15 +10,9 @@ export default function Footer() {
         <div className="lg:col-span-5">
           <Logo />
           <p className="mt-6 max-w-sm font-serif text-[1.0625rem] leading-relaxed text-white/70">{site.description}</p>
-          <div className="mt-6 flex items-center gap-3">
-            <a
-              href={site.x.url}
-              target="_blank"
-              rel="noreferrer"
-              className="flex items-center gap-2 rounded-sm border border-white/15 px-4 py-2 text-sm text-white transition-colors hover:border-gold-500 hover:text-gold-400"
-            >
-              <XIcon className="size-3.5" /> {site.x.handle}
-            </a>
+          <div className="mt-7">
+            <p className="mb-3 font-display text-[11px] font-semibold tracking-[0.24em] text-gold-400 uppercase">Follow {site.x.handle}</p>
+            <SocialLinks variant="footer" />
           </div>
         </div>
 
@@ -51,6 +45,7 @@ export default function Footer() {
               <li><Link href="/#subscribe" className="transition-colors hover:text-white">Newsletter</Link></li>
               <li><Link href="/about#editorial-standards" className="transition-colors hover:text-white">Editorial standards</Link></li>
               <li><Link href="/about#contact" className="transition-colors hover:text-white">Contact</Link></li>
+              <li><Link href="/admin" className="transition-colors hover:text-white">Staff sign-in</Link></li>
             </ul>
           </div>
         </div>

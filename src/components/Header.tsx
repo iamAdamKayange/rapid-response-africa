@@ -4,7 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Logo from "./Logo";
-import { CloseIcon, MenuIcon, SearchIcon, XIcon, ArrowIcon } from "./Icons";
+import { CloseIcon, MenuIcon, SearchIcon, ArrowIcon } from "./Icons";
+import SocialLinks from "./SocialLinks";
 import { navItems, site } from "@/lib/content";
 
 type SearchEntry = { slug: string; title: string; kicker: string; dek: string };
@@ -86,9 +87,8 @@ export default function Header({ searchIndex }: { searchIndex: SearchEntry[] }) 
           <div className="flex items-center gap-5">
             <Link href="/about" className="transition-colors hover:text-white">About</Link>
             <Link href="/briefings" className="transition-colors hover:text-white">Briefings</Link>
-            <a href={site.x.url} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 transition-colors hover:text-white">
-              <XIcon className="size-3" /> {site.x.handle}
-            </a>
+            <span className="h-3 w-px bg-white/20" />
+            <SocialLinks variant="bar" />
           </div>
         </div>
       </div>
@@ -199,9 +199,10 @@ export default function Header({ searchIndex }: { searchIndex: SearchEntry[] }) 
             >
               Get the Daily Brief
             </Link>
-            <a href={site.x.url} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2 py-2 text-sm text-white/70">
-              <XIcon className="size-3.5" /> Follow {site.x.handle}
-            </a>
+            <div className="pt-3">
+              <SocialLinks variant="drawer" />
+              <p className="mt-3 text-center text-xs text-white/50">{site.x.handle} everywhere</p>
+            </div>
           </div>
         </aside>
       </div>

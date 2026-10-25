@@ -2,7 +2,8 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    remotePatterns: [{ protocol: "https", hostname: "images.unsplash.com" }],
+    // Editors paste image URLs from any host (Unsplash, Cloudinary, their own CDN…).
+    remotePatterns: [{ protocol: "https", hostname: "**" }],
   },
 };
 

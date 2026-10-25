@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { dailyBrief } from "@/lib/content";
+import { type Briefing, briefingTime } from "@/lib/content";
 
-export default function DailyBrief() {
+export default function DailyBrief({ items }: { items: Briefing[] }) {
   return (
     <aside className="relative flex h-full flex-col overflow-hidden bg-navy-900 p-6 text-white sm:p-7">
       <div
@@ -15,12 +15,12 @@ export default function DailyBrief() {
         </span>
       </div>
       <ol className="relative mt-6 flex-1 space-y-6">
-        {dailyBrief.map((item) => (
-          <li key={item.title}>
-            <Link href={item.href} className="group block">
+        {items.map((item) => (
+          <li key={item.id}>
+            <Link href={item.link || "/briefings"} className="group block">
               <span className="block h-0.5 w-7 bg-gold-500 transition-all duration-300 group-hover:w-12" />
               <span className="mt-3 block font-serif text-xl leading-snug text-white group-hover:text-gold-300">{item.title}</span>
-              <span className="mt-1 block text-xs text-white/55">Today, {item.time}</span>
+              <span className="mt-1 block text-xs text-white/55">{briefingTime(item.occurredAt)}</span>
             </Link>
           </li>
         ))}

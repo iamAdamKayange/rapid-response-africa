@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import ArticleCard from "@/components/ArticleCard";
 import NewsletterBand from "@/components/NewsletterBand";
-import { bySection, getSection, sections, type SectionSlug } from "@/lib/content";
+import { getSection, inSection, sections, type SectionSlug } from "@/lib/content";
+import { getArticles } from "@/lib/data";
+
+export const revalidate = 30;
 
 export function generateStaticParams() {
   return sections.map((s) => ({ slug: s.slug }));
@@ -17,7 +20,7 @@ export default async function SectionPage({ params }: { params: Promise<{ slug: 
   const section = getSection((await params).slug);
   if (!section) notFound();
 
-  const [lead, ...rest] = bySection(section.slug as SectionSlug);
+  const [lead, ...rest] = inSection(await getArticles(), section.slug as SectionSlug);
 
   return (
     <main>

@@ -32,3 +32,24 @@ Newsletter forms (`src/components/NewsletterForm.tsx`) show a thank-you message 
 to an email provider.
 
 Article photos come from Unsplash (free licence) via `images.unsplash.com`.
+
+## Backend & Admin/Author panel
+
+The site reads live content from the Node.js API (separate repo, hosted on Render, database on Neon).
+
+| Variable | Where | Value |
+| --- | --- | --- |
+| `NEXT_PUBLIC_API_URL` | Vercel → Settings → Environment Variables (and `.env.local` for dev) | `https://<your-render-service>.onrender.com` |
+
+Without it (or while the API is asleep) the site shows the built-in content from `src/lib/content.ts`.
+Published changes appear on the site within ~30 seconds.
+
+The panel lives at **`/admin`** (link "Staff sign-in" in the footer; hidden from search engines via `robots.txt`).
+
+- **Admin**: publish/unpublish, choose the lead story, edit anything, briefings, team accounts, newsletter subscribers (CSV export)
+- **Author**: write articles, save drafts, submit for review, post briefings
+
+Demo accounts are created by the backend's `npm run seed` (see the backend README / `.env.example`).
+Change their passwords from **My profile** before going live.
+
+Socials (@Africans24 everywhere) are configured in `socials` in `src/lib/content.ts`.

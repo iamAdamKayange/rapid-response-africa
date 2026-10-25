@@ -1,4 +1,5 @@
-// Sample editorial content. Replace with a CMS (Sanity, Contentful, WordPress headless…) when ready.
+// Site constants plus built-in fallback content. Live content comes from the API (see lib/data.ts);
+// the articles and briefings below are only shown when NEXT_PUBLIC_API_URL is unset or the API is unreachable.
 
 export type SectionSlug =
   | "africa"
@@ -8,7 +9,8 @@ export type SectionSlug =
   | "business"
   | "development";
 
-export type Region = "North Africa" | "West Africa" | "East Africa" | "Central Africa" | "Southern Africa" | "Continental";
+export const regions = ["Continental", "North Africa", "West Africa", "East Africa", "Central Africa", "Southern Africa"] as const;
+export type Region = (typeof regions)[number];
 
 export type Block =
   | { type: "p"; text: string }
@@ -29,6 +31,29 @@ export type Article = {
   readMinutes: number;
   body: Block[];
 };
+
+export type Briefing = {
+  id: number | string;
+  title: string;
+  summary: string;
+  region: string;
+  link?: string | null;
+  occurredAt: string;
+};
+
+export type SocialKey = "x" | "instagram" | "facebook" | "tiktok" | "youtube" | "threads" | "linkedin" | "whatsapp";
+
+// Every network uses the same handle: Africans24.
+export const socials: { key: SocialKey; label: string; url: string }[] = [
+  { key: "x", label: "X", url: "https://x.com/Africans24" },
+  { key: "instagram", label: "Instagram", url: "https://www.instagram.com/africans24" },
+  { key: "facebook", label: "Facebook", url: "https://www.facebook.com/africans24" },
+  { key: "tiktok", label: "TikTok", url: "https://www.tiktok.com/@africans24" },
+  { key: "youtube", label: "YouTube", url: "https://www.youtube.com/@africans24" },
+  { key: "threads", label: "Threads", url: "https://www.threads.net/@africans24" },
+  { key: "linkedin", label: "LinkedIn", url: "https://www.linkedin.com/company/africans24" },
+  { key: "whatsapp", label: "WhatsApp", url: "https://whatsapp.com/channel/africans24" },
+];
 
 export const site = {
   name: "The Rapid Response Africa",
@@ -88,7 +113,7 @@ const genericBody = (topic: string, angle: string): Block[] => [
   },
 ];
 
-export const articles: Article[] = [
+export const fallbackArticles: Article[] = [
   {
     slug: "the-corridors-connecting-africas-next-chapter",
     title: "The corridors connecting Africa's next chapter",
@@ -414,37 +439,47 @@ export const articles: Article[] = [
   },
 ];
 
-export const dailyBrief = [
-  { title: "Regional integration", time: "08:12", href: "/article/what-a-single-market-means-for-small-exporters" },
-  { title: "Energy & infrastructure", time: "06:47", href: "/article/power-pools-and-the-quiet-work-of-keeping-the-lights-on" },
-  { title: "Diplomacy watch", time: "05:31", href: "/article/why-regional-blocs-are-becoming-first-responders" },
+export const fallbackBriefings: Briefing[] = [
+  { id: "f1", title: "Regional integration", region: "Continental", summary: "Trade ministers' agenda centres on customs harmonisation and digital border systems.", link: "/article/what-a-single-market-means-for-small-exporters", occurredAt: "2026-10-25T08:12:00Z" },
+  { id: "f2", title: "Energy & infrastructure", region: "Southern Africa", summary: "Utilities coordinate on cross-border supply as seasonal demand rises.", link: "/article/power-pools-and-the-quiet-work-of-keeping-the-lights-on", occurredAt: "2026-10-25T06:47:00Z" },
+  { id: "f3", title: "Diplomacy watch", region: "Central Africa", summary: "Regional envoys continue consultations ahead of a scheduled summit.", link: "/article/why-regional-blocs-are-becoming-first-responders", occurredAt: "2026-10-25T05:31:00Z" },
+  { id: "f4", title: "Markets", region: "East Africa", summary: "Currency and bond markets steady as investors await policy guidance.", occurredAt: "2026-10-24T16:00:00Z" },
+  { id: "f5", title: "Governance", region: "West Africa", summary: "Electoral bodies publish updated timelines and voter-registration figures.", occurredAt: "2026-10-24T12:30:00Z" },
+  { id: "f6", title: "Climate & energy", region: "North Africa", summary: "Renewable tenders draw interest from regional and international developers.", occurredAt: "2026-10-24T09:10:00Z" },
 ];
 
-export const tickerItems = [
-  "Africa's decisions. Explained.",
-  "Trade corridors: what the next phase of integration requires",
-  "Energy transition: grids, pools and the financing gap",
-  "Regional blocs step up as first responders in mediation",
-  "Capital markets: domestic investors move to the centre",
-];
-
-export const briefings = [
-  { time: "08:12", region: "Continental", title: "Regional integration", summary: "Trade ministers' agenda centres on customs harmonisation and digital border systems." },
-  { time: "06:47", region: "Southern Africa", title: "Energy & infrastructure", summary: "Utilities coordinate on cross-border supply as seasonal demand rises." },
-  { time: "05:31", region: "Central Africa", title: "Diplomacy watch", summary: "Regional envoys continue consultations ahead of a scheduled summit." },
-  { time: "Yesterday", region: "East Africa", title: "Markets", summary: "Currency and bond markets steady as investors await policy guidance." },
-  { time: "Yesterday", region: "West Africa", title: "Governance", summary: "Electoral bodies publish updated timelines and voter-registration figures." },
-  { time: "Yesterday", region: "North Africa", title: "Climate & energy", summary: "Renewable tenders draw interest from regional and international developers." },
-];
-
-export const getArticle = (slug: string) => articles.find((a) => a.slug === slug);
 export const getSection = (slug: string) => sections.find((s) => s.slug === slug);
-export const bySection = (slug: SectionSlug) => articles.filter((a) => a.section === slug || (slug === "africa" && a.region !== "Continental"));
-export const sectionName = (slug: SectionSlug) => getSection(slug)?.name ?? slug;
+export const sectionName = (slug: string) => getSection(slug)?.name ?? slug;
+export const inSection = (list: Article[], slug: SectionSlug) =>
+  list.filter((a) => a.section === slug || (slug === "africa" && a.region !== "Continental"));
 
 export function formatDate(iso: string) {
   return new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }).format(new Date(iso));
 }
 export function formatTime(iso: string) {
   return new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "UTC" }).format(new Date(iso));
+}
+
+/** "Today, 08:12" / "Yesterday" / "22 Oct" relative to now (UTC). */
+export function briefingTime(iso: string) {
+  const d = new Date(iso);
+  const day = (x: Date) => Date.UTC(x.getUTCFullYear(), x.getUTCMonth(), x.getUTCDate());
+  const diff = Math.round((day(new Date()) - day(d)) / 86_400_000);
+  if (diff <= 0) return `Today, ${formatTime(iso)}`;
+  if (diff === 1) return "Yesterday";
+  return new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", timeZone: "UTC" }).format(d);
+}
+
+/** Parses the API's light article text format: blank-line paragraphs, "## " headings, "> " quotes. */
+export function parseBody(text: string): Block[] {
+  return text
+    .replace(/\r\n/g, "\n")
+    .split(/\n{2,}/)
+    .map((chunk) => chunk.trim())
+    .filter(Boolean)
+    .map((chunk): Block => {
+      if (chunk.startsWith("## ")) return { type: "h2", text: chunk.slice(3).trim() };
+      if (chunk.startsWith("> ")) return { type: "quote", text: chunk.replace(/^>\s?/gm, "").trim() };
+      return { type: "p", text: chunk.replace(/\n/g, " ") };
+    });
 }

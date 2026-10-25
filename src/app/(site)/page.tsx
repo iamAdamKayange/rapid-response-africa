@@ -6,22 +6,26 @@ import DailyBrief from "@/components/DailyBrief";
 import NewsletterBand from "@/components/NewsletterBand";
 import SectionHeading from "@/components/SectionHeading";
 import { ClockIcon } from "@/components/Icons";
-import { articles, briefings, bySection, type SectionSlug, sectionName } from "@/lib/content";
+import { briefingTime, inSection, type SectionSlug, sectionName } from "@/lib/content";
+import { getArticles, getBriefings } from "@/lib/data";
+
+export const revalidate = 30;
 
 const regions = ["North Africa", "West Africa", "East Africa", "Central Africa", "Southern Africa"] as const;
 
-export default function Home() {
+export default async function Home() {
+  const [articles, briefings] = await Promise.all([getArticles(), getBriefings(6)]);
   const [lead, ...rest] = articles;
   const latest = rest.slice(0, 3);
   const inDepth = rest.slice(3, 7);
-  const mostRead = [articles[7], articles[1], articles[10], articles[4], articles[13]];
-  const regional = regions.map((r) => articles.find((a) => a.region === r)!).filter(Boolean);
+  const mostRead = (rest.length > 11 ? rest.slice(7, 12) : rest.slice(0, 5));
+  const regional = regions.map((r) => articles.find((a) => a.region === r)).filter((a) => a !== undefined);
   const featured = new Set([lead, ...latest, ...inDepth].map((a) => a.slug));
   const desks: SectionSlug[] = ["governance", "business", "development"];
 
   return (
     <main>
-      <BriefTicker />
+      <BriefTicker items={["Africa's decisions. Explained.", ...articles.slice(0, 5).map((a) => a.title)]} />
 
       {/* Hero */}
       <section className="container-x pt-6 pb-12 sm:pt-10 lg:pb-16">
@@ -51,7 +55,7 @@ export default function Home() {
             </div>
           </Link>
           <div className="order-3 lg:col-span-3">
-            <DailyBrief />
+            <DailyBrief items={briefings.slice(0, 3)} />
           </div>
         </div>
       </section>
@@ -104,10 +108,10 @@ export default function Home() {
               <SectionHeading title="Situational Briefings" href="/briefings" />
               <ol className="relative space-y-6 border-l border-stone-200 pl-6">
                 {briefings.slice(0, 4).map((b) => (
-                  <li key={b.title + b.time} className="relative">
+                  <li key={b.id} className="relative">
                     <span className="absolute top-1.5 -left-[29px] size-2.5 rounded-full border-2 border-white bg-gold-500 ring-1 ring-gold-500" />
                     <p className="flex items-center gap-2 text-[11px] font-semibold tracking-wider text-ink-muted uppercase">
-                      <span className="text-navy-900">{b.time}</span> · {b.region}
+                      <span className="text-navy-900">{briefingTime(b.occurredAt)}</span> · {b.region}
                     </p>
                     <p className="mt-1 font-serif text-[1.0625rem] font-medium text-ink">{b.title}</p>
                     <p className="mt-0.5 text-sm leading-relaxed text-ink-soft">{b.summary}</p>
@@ -139,7 +143,8 @@ export default function Home() {
       <section className="container-x pb-14 sm:pb-20">
         <div className="grid gap-14 md:grid-cols-3 md:gap-8">
           {desks.map((slug) => {
-            const [first, ...others] = bySection(slug).filter((a) => !featured.has(a.slug));
+            const [first, ...others] = inSection(articles, slug).filter((a) => !featured.has(a.slug));
+            if (!first) return null;
             return (
               <div key={slug}>
                 <SectionHeading title={sectionName(slug)} href={`/section/${slug}`} linkLabel="More" />

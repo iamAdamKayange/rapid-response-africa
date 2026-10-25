@@ -1,8 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Montserrat, Newsreader } from "next/font/google";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import { articles, site } from "@/lib/content";
+import { site } from "@/lib/content";
 import "./globals.css";
 
 const newsreader = Newsreader({ subsets: ["latin"], variable: "--font-newsreader", display: "swap", style: ["normal", "italic"] });
@@ -27,17 +25,9 @@ export const metadata: Metadata = {
 export const viewport: Viewport = { themeColor: "#0a1a31" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const searchIndex = articles.map(({ slug, title, kicker, dek }) => ({ slug, title, kicker, dek }));
   return (
     <html lang="en" className={`${newsreader.variable} ${inter.variable} ${montserrat.variable}`}>
-      <body className="min-h-screen">
-        <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[60] focus:bg-gold-500 focus:px-4 focus:py-2 focus:text-navy-900">
-          Skip to content
-        </a>
-        <Header searchIndex={searchIndex} />
-        <div id="main">{children}</div>
-        <Footer />
-      </body>
+      <body className="min-h-screen">{children}</body>
     </html>
   );
 }

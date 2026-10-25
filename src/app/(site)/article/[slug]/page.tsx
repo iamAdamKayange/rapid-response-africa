@@ -6,14 +6,17 @@ import ArticleCard from "@/components/ArticleCard";
 import NewsletterForm from "@/components/NewsletterForm";
 import SectionHeading from "@/components/SectionHeading";
 import ShareBar from "@/components/ShareBar";
-import { articles, formatDate, formatTime, getArticle, sectionName, site } from "@/lib/content";
+import { formatDate, formatTime, sectionName, site } from "@/lib/content";
+import { getArticle, getArticles } from "@/lib/data";
 
-export function generateStaticParams() {
-  return articles.map((a) => ({ slug: a.slug }));
+export const revalidate = 30;
+
+export async function generateStaticParams() {
+  return (await getArticles()).map((a) => ({ slug: a.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const article = getArticle((await params).slug);
+  const article = await getArticle((await params).slug);
   if (!article) return {};
   return {
     title: article.title,
@@ -23,10 +26,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
-  const article = getArticle((await params).slug);
+  const article = await getArticle((await params).slug);
   if (!article) notFound();
 
-  const related = articles.filter((a) => a.slug !== article.slug && (a.section === article.section || a.region === article.region)).slice(0, 3);
+  const related = (await getArticles()).filter((a) => a.slug !== article.slug && (a.section === article.section || a.region === article.region)).slice(0, 3);
 
   return (
     <main>
@@ -58,7 +61,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           <div className="relative -mx-4 aspect-[16/9] overflow-hidden bg-stone-100 sm:mx-0 lg:aspect-[21/9]">
             <Image src={article.image} alt={article.imageAlt} fill priority sizes="(min-width: 1280px) 1280px, 100vw" className="object-cover" />
           </div>
-          <figcaption className="mt-3 text-xs text-ink-muted">{article.imageAlt}. Photo: Unsplash.</figcaption>
+          <figcaption className="mt-3 text-xs text-ink-muted">{article.imageAlt}</figcaption>
         </figure>
 
         <div className="container-x mt-10 grid gap-10 pb-16 sm:mt-14 lg:grid-cols-12">

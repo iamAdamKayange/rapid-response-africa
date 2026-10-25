@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { XIcon } from "@/components/Icons";
 import NewsletterBand from "@/components/NewsletterBand";
+import SocialLinks from "@/components/SocialLinks";
 import { sections, site } from "@/lib/content";
 
 export const metadata: Metadata = {
@@ -64,11 +65,10 @@ export default function AboutPage() {
                 <dd><a href={site.url} className="text-gold-700 hover:underline">rapid-response.com</a></dd>
               </div>
               <div className="grid grid-cols-[96px_1fr] gap-3">
-                <dt className="text-ink-muted">On X</dt>
+                <dt className="text-ink-muted">Socials</dt>
                 <dd>
-                  <a href={site.x.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-gold-700 hover:underline">
-                    <XIcon className="size-3" /> {site.x.handle}
-                  </a>
+                  <p className="mb-3 font-medium text-ink">{site.x.handle} on every platform</p>
+                  <SocialLinks variant="light" />
                 </dd>
               </div>
             </dl>
