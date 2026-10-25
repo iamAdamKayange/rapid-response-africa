@@ -3,6 +3,8 @@ import Logo from "./Logo";
 import SocialLinks from "./SocialLinks";
 import { sections, site } from "@/lib/content";
 
+const ADMIN_URL = process.env.NEXT_PUBLIC_ADMIN_URL;
+
 export default function Footer() {
   return (
     <footer className="bg-navy-950 text-white/70">
@@ -45,7 +47,9 @@ export default function Footer() {
               <li><Link href="/#subscribe" className="transition-colors hover:text-white">Newsletter</Link></li>
               <li><Link href="/about#editorial-standards" className="transition-colors hover:text-white">Editorial standards</Link></li>
               <li><Link href="/about#contact" className="transition-colors hover:text-white">Contact</Link></li>
-              <li><Link href="/admin" className="transition-colors hover:text-white">Staff sign-in</Link></li>
+              {ADMIN_URL && (
+                <li><a href={ADMIN_URL} className="transition-colors hover:text-white">Staff sign-in</a></li>
+              )}
             </ul>
           </div>
         </div>

@@ -35,21 +35,20 @@ Article photos come from Unsplash (free licence) via `images.unsplash.com`.
 
 ## Backend & Admin/Author panel
 
-The site reads live content from the Node.js API (separate repo, hosted on Render, database on Neon).
+Three repos work together:
 
-| Variable | Where | Value |
+| Repo | What | Host |
 | --- | --- | --- |
-| `NEXT_PUBLIC_API_URL` | Vercel → Settings → Environment Variables (and `.env.local` for dev) | `https://<your-render-service>.onrender.com` |
+| `rapid-response-africa` | This public website | Vercel |
+| `admin-response-africa` | Admin/Author panel (separate Next.js app) | Vercel |
+| `response-africa-backend` | Node.js API + Neon Postgres | Render |
 
-Without it (or while the API is asleep) the site shows the built-in content from `src/lib/content.ts`.
+| Variable (Vercel → Settings → Environment Variables) | Value |
+| --- | --- |
+| `NEXT_PUBLIC_API_URL` | `https://<your-render-service>.onrender.com` |
+| `NEXT_PUBLIC_ADMIN_URL` | Optional: the panel's URL; adds a "Staff sign-in" link in the footer |
+
+Without the API URL (or while the API is asleep) the site shows the built-in content from `src/lib/content.ts`.
 Published changes appear on the site within ~30 seconds.
-
-The panel lives at **`/admin`** (link "Staff sign-in" in the footer; hidden from search engines via `robots.txt`).
-
-- **Admin**: publish/unpublish, choose the lead story, edit anything, briefings, team accounts, newsletter subscribers (CSV export)
-- **Author**: write articles, save drafts, submit for review, post briefings
-
-Demo accounts are created by the backend's `npm run seed` (see the backend README / `.env.example`).
-Change their passwords from **My profile** before going live.
 
 Socials (@Africans24 everywhere) are configured in `socials` in `src/lib/content.ts`.
