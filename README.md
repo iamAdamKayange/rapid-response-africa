@@ -28,8 +28,8 @@ The articles there are **sample content** — replace them with real reporting (
 Brand assets: `public/images/logo.jpeg`, `public/images/banner.jpeg`, `public/images/africa-outline.png`
 (the outline was extracted from the banner). Colours are defined in `src/app/globals.css` (`navy-*`, `gold-*`).
 
-Newsletter forms (`src/components/NewsletterForm.tsx`) show a thank-you message but are not yet connected
-to an email provider.
+Newsletter sign-ups (`src/components/NewsletterForm.tsx`) are saved by the API and listed in the panel
+(Subscribers → Export CSV). Sending the emails needs an email provider (Mailchimp, Resend…).
 
 Article photos come from Unsplash (free licence) via `images.unsplash.com`.
 
