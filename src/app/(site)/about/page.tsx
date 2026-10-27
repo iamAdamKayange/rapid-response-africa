@@ -62,7 +62,7 @@ export default function AboutPage() {
               ))}
               <div className="grid grid-cols-[96px_1fr] gap-3 border-b border-stone-100 pb-4">
                 <dt className="text-ink-muted">Website</dt>
-                <dd><a href={site.url} className="text-gold-700 hover:underline">rapid-response.com</a></dd>
+                <dd><a href={site.url} className="text-gold-700 hover:underline">{new URL(site.url).host}</a></dd>
               </div>
               <div className="grid grid-cols-[96px_1fr] gap-3">
                 <dt className="text-ink-muted">Socials</dt>
@@ -116,7 +116,7 @@ export default function AboutPage() {
               <XIcon className="size-3.5" /> Message {site.x.handle}
             </a>
             <a href={site.url} className="inline-flex items-center rounded-sm border border-navy-900 px-6 py-3 text-sm font-medium text-navy-900 hover:bg-navy-900 hover:text-white">
-              rapid-response.com
+              {new URL(site.url).host}
             </a>
           </div>
         </div>

@@ -41,12 +41,15 @@ Three repos work together:
 | --- | --- | --- |
 | `rapid-response-africa` | This public website | Vercel |
 | `admin-response-africa` | Admin/Author panel (separate Next.js app) | Vercel |
-| `response-africa-backend` | Node.js API + Neon Postgres | Render |
+| `response-africa-backend` | Node.js API + Neon Postgres | Hetzner VPS (`api.rapid-response.africa`) |
 
 | Variable (Vercel → Settings → Environment Variables) | Value |
 | --- | --- |
-| `NEXT_PUBLIC_API_URL` | `https://<your-render-service>.onrender.com` |
-| `NEXT_PUBLIC_ADMIN_URL` | Optional: the panel's URL; adds a "Staff sign-in" link in the footer |
+| `NEXT_PUBLIC_API_URL` | `https://api.rapid-response.africa` |
+| `NEXT_PUBLIC_ADMIN_URL` | `https://admin.rapid-response.africa` (adds a "Staff sign-in" link in the footer) |
+| `NEXT_PUBLIC_SITE_URL` | `https://rapid-response.africa` (canonical URL for links and social previews) |
+
+`NEXT_PUBLIC_*` values are baked in at build time: after changing them in Vercel, **redeploy**.
 
 Without the API URL (or while the API is asleep) the site shows the built-in content from `src/lib/content.ts`.
 Published changes appear on the site within ~30 seconds.

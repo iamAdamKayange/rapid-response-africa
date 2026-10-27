@@ -61,7 +61,7 @@ export const site = {
   tagline: "Africa. In context.",
   description:
     "Verified news, policy clarity and situational briefings on diplomacy, governance, business and development. Around the clock in Africa.",
-  url: "https://rapid-response.com",
+  url: process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://rapid-response.africa",
   x: { handle: "@Africans24", url: "https://x.com/Africans24" },
   category: "Media & News Company",
   location: "Africa",
