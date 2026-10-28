@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import NewsletterBand from "@/components/NewsletterBand";
 import Link from "next/link";
-import { briefingTime } from "@/lib/content";
+import { briefingTime, safeHref } from "@/lib/content";
 import { getBriefings } from "@/lib/data";
 
 export const revalidate = 30;
@@ -38,8 +38,8 @@ export default async function BriefingsPage() {
               <div>
                 <h2 className="font-serif text-2xl text-ink">{b.title}</h2>
                 <p className="mt-2 text-[15px] leading-relaxed text-ink-soft">{b.summary}</p>
-                {b.link && (
-                  <Link href={b.link} className="mt-3 inline-block text-[13px] font-medium text-gold-700 hover:text-navy-900">
+                {safeHref(b.link) && (
+                  <Link href={safeHref(b.link)!} className="mt-3 inline-block text-[13px] font-medium text-gold-700 hover:text-navy-900">
                     Read the analysis →
                   </Link>
                 )}

@@ -47,7 +47,11 @@ export default function NewsletterForm({ tone = "dark" }: { tone?: "dark" | "lig
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Your email address"
-          className={`h-12 min-w-0 flex-1 rounded-sm px-4 text-[15px] focus:outline-none sm:rounded-r-none ${
+          autoComplete="email"
+          inputMode="email"
+          // flex-1 only from sm up: in the stacked phone layout it would collapse the input's height.
+          // 16px text on phones stops iOS Safari from zooming in when the field is tapped.
+          className={`block h-12 w-full min-w-0 shrink-0 rounded-sm px-4 text-base leading-normal focus:outline-none sm:w-auto sm:flex-1 sm:text-[15px] sm:rounded-r-none ${
             tone === "dark"
               ? "bg-white text-ink placeholder:text-ink-muted"
               : "border border-stone-300 bg-white text-ink placeholder:text-ink-muted focus:border-gold-500"
@@ -56,7 +60,7 @@ export default function NewsletterForm({ tone = "dark" }: { tone?: "dark" | "lig
         <button
           type="submit"
           disabled={state === "sending"}
-          className="h-12 shrink-0 rounded-sm bg-gold-500 px-7 text-[15px] font-semibold text-navy-900 transition-colors hover:bg-gold-400 disabled:opacity-60 sm:rounded-l-none"
+          className="h-12 w-full shrink-0 rounded-sm bg-gold-500 px-7 text-base font-semibold sm:w-auto sm:text-[15px] text-navy-900 transition-colors hover:bg-gold-400 disabled:opacity-60 sm:rounded-l-none"
         >
           {state === "sending" ? "Subscribing…" : "Get the brief"}
         </button>

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { type Article, formatDate } from "@/lib/content";
+import { type Article, canOptimizeImage, formatDate } from "@/lib/content";
 
 type Variant = "standard" | "horizontal" | "compact" | "overlay";
 
@@ -20,7 +20,7 @@ export default function ArticleCard({
   if (variant === "overlay") {
     return (
       <Link href={href} className="group relative block aspect-[4/5] overflow-hidden bg-navy-900 sm:aspect-[3/4]">
-        <Image src={article.image} alt={article.imageAlt} fill sizes={sizes} className="object-cover opacity-80 transition duration-700 group-hover:scale-105 group-hover:opacity-70" />
+        <Image src={article.image} unoptimized={!canOptimizeImage(article.image)} alt={article.imageAlt} fill sizes={sizes} className="object-cover opacity-80 transition duration-700 group-hover:scale-105 group-hover:opacity-70" />
         <div className="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/40 to-transparent" />
         <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6">
           <span className="font-sans text-[11px] font-semibold tracking-[0.18em] text-gold-400 uppercase">{article.region}</span>
@@ -36,7 +36,7 @@ export default function ArticleCard({
     return (
       <Link href={href} className="group flex gap-4">
         <div className="relative aspect-square w-20 shrink-0 overflow-hidden bg-stone-100 sm:w-24">
-          <Image src={article.image} alt={article.imageAlt} fill sizes="96px" className="object-cover transition duration-700 group-hover:scale-105" />
+          <Image src={article.image} unoptimized={!canOptimizeImage(article.image)} alt={article.imageAlt} fill sizes="96px" className="object-cover transition duration-700 group-hover:scale-105" />
         </div>
         <div className="min-w-0">
           <span className="kicker">{article.kicker}</span>
@@ -52,7 +52,7 @@ export default function ArticleCard({
     return (
       <Link href={href} className="group grid gap-5 sm:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] sm:gap-7">
         <div className="relative aspect-[16/10] overflow-hidden bg-stone-100">
-          <Image src={article.image} alt={article.imageAlt} fill sizes="(min-width: 640px) 40vw, 100vw" className="object-cover transition duration-700 group-hover:scale-[1.04]" />
+          <Image src={article.image} unoptimized={!canOptimizeImage(article.image)} alt={article.imageAlt} fill sizes="(min-width: 640px) 40vw, 100vw" className="object-cover transition duration-700 group-hover:scale-[1.04]" />
         </div>
         <div className="flex flex-col justify-center">
           <span className="kicker">{article.kicker}</span>
@@ -71,7 +71,7 @@ export default function ArticleCard({
   return (
     <Link href={href} className="group block">
       <div className="relative aspect-[16/10] overflow-hidden bg-stone-100">
-        <Image src={article.image} alt={article.imageAlt} fill priority={priority} sizes={sizes} className="object-cover transition duration-700 group-hover:scale-[1.04]" />
+        <Image src={article.image} unoptimized={!canOptimizeImage(article.image)} alt={article.imageAlt} fill priority={priority} sizes={sizes} className="object-cover transition duration-700 group-hover:scale-[1.04]" />
       </div>
       <span className="kicker mt-4 block">{article.kicker}</span>
       <h3 className="mt-2 font-serif text-[1.375rem] leading-snug text-ink">

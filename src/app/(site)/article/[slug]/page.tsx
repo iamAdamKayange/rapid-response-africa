@@ -6,7 +6,7 @@ import ArticleCard from "@/components/ArticleCard";
 import NewsletterForm from "@/components/NewsletterForm";
 import SectionHeading from "@/components/SectionHeading";
 import ShareBar from "@/components/ShareBar";
-import { formatDate, formatTime, sectionName, site } from "@/lib/content";
+import { canOptimizeImage, formatDate, formatTime, sectionName, site } from "@/lib/content";
 import { getArticle, getArticles } from "@/lib/data";
 import { articlePreview } from "@/lib/seo";
 
@@ -62,7 +62,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
         <figure className="container-x mt-10 sm:mt-12">
           <div className="relative -mx-4 aspect-[16/9] overflow-hidden bg-stone-100 sm:mx-0 lg:aspect-[21/9]">
-            <Image src={article.image} alt={article.imageAlt} fill priority sizes="(min-width: 1280px) 1280px, 100vw" className="object-cover" />
+            <Image src={article.image} unoptimized={!canOptimizeImage(article.image)} alt={article.imageAlt} fill priority sizes="(min-width: 1280px) 1280px, 100vw" className="object-cover" />
           </div>
           <figcaption className="mt-3 text-xs text-ink-muted">{article.imageAlt}</figcaption>
         </figure>

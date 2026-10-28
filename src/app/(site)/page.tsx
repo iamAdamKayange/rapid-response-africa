@@ -7,7 +7,7 @@ import NewsletterBand from "@/components/NewsletterBand";
 import SectionHeading from "@/components/SectionHeading";
 import { ClockIcon } from "@/components/Icons";
 import type { Metadata } from "next";
-import { briefingTime, inSection, type SectionSlug, sectionName, site } from "@/lib/content";
+import { briefingTime, canOptimizeImage, inSection, type SectionSlug, sectionName, site } from "@/lib/content";
 import { getArticles, getBriefings } from "@/lib/data";
 import { articlePreview, newestArticle } from "@/lib/seo";
 
@@ -55,6 +55,7 @@ export default async function Home() {
             <div className="relative order-1 -mx-4 aspect-[16/10] overflow-hidden bg-stone-100 sm:mx-0 lg:order-2 lg:col-span-5 lg:aspect-auto lg:min-h-[420px]">
               <Image
                 src={lead.image}
+                unoptimized={!canOptimizeImage(lead.image)}
                 alt={lead.imageAlt}
                 fill
                 priority

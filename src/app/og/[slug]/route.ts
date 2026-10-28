@@ -11,11 +11,22 @@ import { newestArticle, OG_HEIGHT, OG_WIDTH } from "@/lib/seo";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
+const MAX_SOURCE_BYTES = 12 * 1024 * 1024;
+
 async function loadImage(src: string): Promise<Buffer> {
-  if (src.startsWith("/")) return readFile(path.join(process.cwd(), "public", src));
+  if (src.startsWith("/")) {
+    // Only files inside public/images, never ../ paths.
+    const file = path.normalize(path.join(process.cwd(), "public", src));
+    if (!file.startsWith(path.join(process.cwd(), "public", "images"))) throw new Error("bad path");
+    return readFile(file);
+  }
+  if (!src.startsWith("https://")) throw new Error("only https images");
   const res = await fetch(src, { signal: AbortSignal.timeout(8_000) });
   if (!res.ok) throw new Error(`image ${res.status}`);
-  return Buffer.from(await res.arrayBuffer());
+  if (Number(res.headers.get("content-length") || 0) > MAX_SOURCE_BYTES) throw new Error("image too large");
+  const buf = Buffer.from(await res.arrayBuffer());
+  if (buf.length > MAX_SOURCE_BYTES) throw new Error("image too large");
+  return buf;
 }
 
 const toCard = (input: Buffer) =>

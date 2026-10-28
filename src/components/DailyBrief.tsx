@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { type Briefing, briefingTime } from "@/lib/content";
+import { type Briefing, briefingTime, safeHref } from "@/lib/content";
 
 export default function DailyBrief({ items }: { items: Briefing[] }) {
   return (
@@ -17,7 +17,7 @@ export default function DailyBrief({ items }: { items: Briefing[] }) {
       <ol className="relative mt-6 flex-1 space-y-6">
         {items.map((item) => (
           <li key={item.id}>
-            <Link href={item.link || "/briefings"} className="group block">
+            <Link href={safeHref(item.link) ?? "/briefings"} className="group block">
               <span className="block h-0.5 w-7 bg-gold-500 transition-all duration-300 group-hover:w-12" />
               <span className="mt-3 block font-serif text-xl leading-snug text-white group-hover:text-gold-300">{item.title}</span>
               <span className="mt-1 block text-xs text-white/55">{briefingTime(item.occurredAt)}</span>

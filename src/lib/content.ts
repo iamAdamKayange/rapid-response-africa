@@ -448,6 +448,26 @@ export const fallbackBriefings: Briefing[] = [
   { id: "f6", title: "Climate & energy", region: "North Africa", summary: "Renewable tenders draw interest from regional and international developers.", occurredAt: "2026-10-24T09:10:00Z" },
 ];
 
+/** Only site paths and https links are rendered as links (blocks javascript:, data:, //evil.com…). */
+export function safeHref(href?: string | null): string | undefined {
+  if (!href) return undefined;
+  if (href.startsWith("/") && !href.startsWith("//") && !href.startsWith("/\\")) return href;
+  return /^https:\/\/[^\s]+$/i.test(href) ? href : undefined;
+}
+
+// Hosts the image optimizer may fetch from (see next.config.ts). Anything else is shown as-is.
+const OPTIMIZED_IMAGE_HOSTS = [/^images\.unsplash\.com$/, /\.r2\.dev$/, /(^|\.)rapid-response\.africa$/];
+
+export function canOptimizeImage(src: string) {
+  if (src.startsWith("/")) return true;
+  try {
+    const { protocol, hostname } = new URL(src);
+    return protocol === "https:" && OPTIMIZED_IMAGE_HOSTS.some((re) => re.test(hostname));
+  } catch {
+    return false;
+  }
+}
+
 export const getSection = (slug: string) => sections.find((s) => s.slug === slug);
 export const sectionName = (slug: string) => getSection(slug)?.name ?? slug;
 export const inSection = (list: Article[], slug: SectionSlug) =>
