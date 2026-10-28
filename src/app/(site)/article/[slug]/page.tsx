@@ -8,6 +8,7 @@ import SectionHeading from "@/components/SectionHeading";
 import ShareBar from "@/components/ShareBar";
 import { formatDate, formatTime, sectionName, site } from "@/lib/content";
 import { getArticle, getArticles } from "@/lib/data";
+import { articlePreview } from "@/lib/seo";
 
 export const revalidate = 30;
 
@@ -18,10 +19,12 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const article = await getArticle((await params).slug);
   if (!article) return {};
+  const path = `/article/${article.slug}`;
   return {
     title: article.title,
     description: article.dek,
-    openGraph: { type: "article", title: article.title, description: article.dek, images: [article.image] },
+    alternates: { canonical: path },
+    ...articlePreview(article, `${site.url}${path}`),
   };
 }
 

@@ -6,10 +6,19 @@ import DailyBrief from "@/components/DailyBrief";
 import NewsletterBand from "@/components/NewsletterBand";
 import SectionHeading from "@/components/SectionHeading";
 import { ClockIcon } from "@/components/Icons";
-import { briefingTime, inSection, type SectionSlug, sectionName } from "@/lib/content";
+import type { Metadata } from "next";
+import { briefingTime, inSection, type SectionSlug, sectionName, site } from "@/lib/content";
 import { getArticles, getBriefings } from "@/lib/data";
+import { articlePreview, newestArticle } from "@/lib/seo";
 
 export const revalidate = 30;
+
+/** Sharing the homepage shows the newest story's headline and hero image. */
+export async function generateMetadata(): Promise<Metadata> {
+  const latest = newestArticle(await getArticles());
+  if (!latest) return {};
+  return { alternates: { canonical: "/" }, ...articlePreview(latest, site.url) };
+}
 
 const regions = ["North Africa", "West Africa", "East Africa", "Central Africa", "Southern Africa"] as const;
 
