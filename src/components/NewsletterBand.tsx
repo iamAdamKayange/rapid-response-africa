@@ -12,7 +12,7 @@ export default function NewsletterBand() {
           <span className="font-display text-[11px] font-semibold tracking-[0.3em] text-gold-400 uppercase">The Daily Brief</span>
           <h2 className="mt-3 font-serif text-3xl leading-tight text-white sm:text-4xl">Understand what matters.</h2>
           <p className="mt-3 max-w-md font-serif text-lg leading-relaxed text-white/75">
-            Independent analysis. Clearer perspectives. A more informed Africa — in your inbox every weekday morning.
+            Independent analysis. Clearer perspectives. Every new story as it is published, and The Daily Brief every weekday morning.
           </p>
         </div>
         <div className="lg:col-span-6">
